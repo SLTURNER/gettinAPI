@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <title>MovieDB</title>
+</head>
+
+<body>
+
+  <div class=" mt-5 ml-5 mr-5">
+    <form class="bd-search d-flex align-items-center" method="get">
+      <input type="text" id="search" style="display:block" class="form-control ds-input" name="" value="" placeholder="Search">
+      <button type="button" id="button" name="button" onclick="getValue()" class="btn btn-primary ml-2">Search</button>
+    </form>
+  </div>
+
+
+  <div class="ml-5 mr-5 container">
+    <div class="row">
+      <h1>Movies</h1>
+    </div>
+    <div id="movies" class="row">
+
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+<script type="text/javascript">
+  function getValue() {
+
+    var toFilter = document.getElementById('movies');
+    console.log(toFilter);
+    var toClear = toFilter.getElementsByTagName('div');
+    console.log(toClear);
+    for (var i = 0; i < toClear.length; i++) {
+      var temp = toClear[i];
+      temp.setAttribute('hidden','true');
+    }
+
+
+    var input = document.getElementById('search');
+    var term = search.value;
+    console.log(term);
+    var ul = document.getElementById('movies');
+    var url = 'http://www.omdbapi.com/?s=' + term + '&apikey=8c663135';
+
+    function createNode(element) {
+      return document.createElement(element);
+    }
+
+    function append(parent, el) {
+      return parent.appendChild(el);
+    }
+    fetch(url)
+      .then((resp) => resp.json())
+      .then(function(data) {
+        let moviesArr = data.Search;
+        for (var i = 0; i <moviesArr.length; i++) {
+        var movies = moviesArr[i];
+
+        let divO = createNode('div'),
+          divI = createNode('div'),
+          divR = createNode('div'),
+          img = createNode('img'),
+          p = createNode('p');
+        a = createNode('a');
+        h5 = createNode('h5');
+        divI.setAttribute('class', 'card-body');
+        divO.setAttribute('class', 'card  mb-2');
+        divO.setAttribute('style', 'width:18rem; height: 650px;');
+        divR.setAttribute('class', 'col-sm');
+        h5.setAttribute('class', 'card-title');
+        img.setAttribute('class', 'card-img-top');
+        a.setAttribute('class', 'btn btn-primary');
+        a.setAttribute('style', 'color: white;');
+        img.src = movies.Poster;
+
+        var imdbID = `${movies.imdbID}`;
+        var href = "movie.html?imdbID=" + imdbID;
+
+        p.innerHTML = "Go to movie page for more information";
+        h5.innerHTML = `${movies.Title}`;
+        a.innerHTML = 'Go to movie';
+
+        a.setAttribute('href', href);
+
+        append(ul, divR);
+        append(divR, divO);
+        append(divO, img);
+        append(divO, divI);
+        append(divI, h5);
+        append(divI, p);
+        append(divI, a);
+      }
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  }
+</script>
+
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <title>MovieDB</title>
+</head>
+
+<body>
+
+  <div id="movieInf" class="container">
+
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+
+</html>
+<script type="text/javascript">
+  var id;
+  var url;
+  var index;
+  url = window.location.href;
+  index = url.search("imdbID=tt");
+  index += 7;
+  id = url.slice(index, index + 9);
+  if (id.length < 9) {
+    window.location.href = "movieDB.html"
+  }
+
+  console.log(id);
+
+  var url = 'http://www.omdbapi.com/?i=' + id + '&apikey=8c663135';
+  var input = document.getElementById('movieInf');
+
+  function createNode(element) {
+    return document.createElement(element);
+  }
+
+  function append(parent, el) {
+    return parent.appendChild(el);
+  }
+
+  fetch(url)
+    .then((resp) => resp.json())
+    .then(function(data) {
+      let movie = data;
+      let div = createNode('div'),
+          img = createNode('img'),
+          p = createNode('p');
+          d = createNode('p');
+          c = createNode('p');
+          a = createNode('p');
+          h = createNode('h1');
+
+      var plot = "<strong>Plot:</strong>    " + movie.Plot;
+      p.innerHTML = plot;
+
+        var director = "<strong>Director:    </strong>" + movie.Director;
+      d.innerHTML = director;
+
+        var cast = "<strong>Cast:    </strong>" + movie.Actors;
+      c.innerHTML = cast;
+
+      var awards = "<strong>Awards:    </strong>" + movie.Awards;
+      a.innerHTML = awards;
+      h.innerHTML = movie.Title;
+      img.src = movie.Poster
+
+      append(input, div);
+      append(div, h);
+      append(div, img);
+      append(div, p);
+      append(div, d);
+      append(div, c);
+      append(div, a);
+
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+</script>
